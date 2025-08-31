@@ -59,9 +59,12 @@ class LaporanController extends Controller
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diperbarui.');
     }
 
-    public function destroy(Laporan $laporan)
-    {
-        $laporan->delete();
-        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dihapus.');
-    }
+    public function destroy($id)
+{
+    $laporan = Laporan::findOrFail($id);
+    $laporan->delete();
+
+    return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dihapus.');
+}
+
 }

@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         session()->flash('success', 'Login berhasil, selamat datang ' . Auth::user()->name . '!');
 
         if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('laporan.index');
         } elseif (Auth::user()->role === 'bendahara') {
             return redirect()->route('bendahara.dashboard');
         }
