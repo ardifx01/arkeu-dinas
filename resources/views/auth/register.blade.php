@@ -126,50 +126,76 @@
                 </div>
                 
                 <!-- Password Field -->
-                <div class="relative">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Kata Sandi</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none input-focus transition-all duration-300 bg-white pr-12"
-                        placeholder="••••••••"
-                        required
-                    >
-                    <button 
-                        type="button" 
-                        class="absolute right-3 top-11 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                        onclick="togglePassword('password')"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
-                    </button>
-                </div>
-                
-                <!-- Confirm Password Field -->
-                <div class="relative">
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Kata Sandi</label>
-                    <input 
-                        type="password" 
-                        id="password_confirmation" 
-                        name="password_confirmation" 
-                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none input-focus transition-all duration-300 bg-white pr-12"
-                        placeholder="••••••••"
-                        required
-                    >
-                    <button 
-                        type="button" 
-                        class="absolute right-3 top-11 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                        onclick="togglePassword('password_confirmation')"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
-                    </button>
-                </div>
+               <div class="relative">
+    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Kata Sandi</label>
+    <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        minlength="8"
+        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none input-focus transition-all duration-300 bg-white pr-12"
+        placeholder="••••••••"
+        required
+    >
+    <button 
+        type="button" 
+        class="absolute right-3 top-11 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+        onclick="togglePassword('password')"
+    >
+        <!-- icon mata -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        </svg>
+    </button>
+</div>
+
+<!-- Confirm Password Field -->
+<div class="relative">
+    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Kata Sandi</label>
+    <input 
+        type="password" 
+        id="password_confirmation" 
+        name="password_confirmation" 
+        minlength="8"
+        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none input-focus transition-all duration-300 bg-white pr-12"
+        placeholder="••••••••"
+        required
+    >
+    <button 
+        type="button" 
+        class="absolute right-3 top-11 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+        onclick="togglePassword('password_confirmation')"
+    >
+        <!-- icon mata -->
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+        </svg>
+    </button>
+</div>
+
+<script>
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+// Validasi tambahan sebelum submit
+document.querySelector("form").addEventListener("submit", function(e) {
+    const pass = document.getElementById("password").value;
+    const passConfirm = document.getElementById("password_confirmation").value;
+
+    if (pass.length < 8) {
+        alert("Password minimal 8 karakter!");
+        e.preventDefault();
+    } else if (pass !== passConfirm) {
+        alert("Konfirmasi password tidak sama!");
+        e.preventDefault();
+    }
+});
+</script>
+
                 
                 <!-- Forgot Password Link -->
                 <div class="flex justify-end">
