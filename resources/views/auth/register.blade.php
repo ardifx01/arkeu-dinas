@@ -173,7 +173,7 @@
                 
                 <!-- Forgot Password Link -->
                 <div class="flex justify-end">
-                    <a href="#" class="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200">
+                    <a href="/login" class="text-sm text-gray-600 hover:text-blue-600 transition-colors duration-200">
                         Sudah punya akun?
                     </a>
                 </div>
