@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 });
 // admin only
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::resource('pengguna', AdminController::class);
     Route::get('/pengguna', [AdminController::class,'index'])->name('pengguna');
+    Route::delete('/pengguna/{user}', [AdminController::class,'destroy'])->name('pengguna.destroy');
 });
 require __DIR__.'/auth.php';

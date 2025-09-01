@@ -244,7 +244,7 @@
                 // Create a form to delete user
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = `/users/${userId}`;
+                form.action = `/pengguna/${userId}`;
                 
                 // Add CSRF token
                 const csrfInput = document.createElement('input');

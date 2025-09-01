@@ -10,6 +10,14 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('admin.dashboard', compact('users'));}
+        return view('admin.dashboard', compact('users'));
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->route('pengguna')->with('success', 'User berhasil dihapus.');
+    }
 
     }
+

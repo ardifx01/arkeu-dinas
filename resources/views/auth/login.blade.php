@@ -33,7 +33,7 @@
 
                 <!-- Email/ID Pengguna -->
                 <div>
-                    <label for="email" class="block text-gray-700 font-medium mb-2">ID Pengguna</label>
+                    <label for="email" class="block text-gray-700 font-medium mb-2">Email Pengguna</label>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
                         class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg 
                                focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
@@ -53,7 +53,8 @@
                             placeholder="Masukkan kata sandi">
                         <button type="button" onclick="togglePassword()" 
                             class="eye-icon absolute right-4 top-3 text-gray-400 hover:text-gray-600">
-                            👁️
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 3C5 3 1.73 7.11 1.07 10c.66 2.89 4.93 7 8.93 7s8.27-4.11 8.93-7c-.66-2.89-4.93-7-8.93-7zM10 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z" /></svg>
                         </button>
                     </div>
                     @error('password')

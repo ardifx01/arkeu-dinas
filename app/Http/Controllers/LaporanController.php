@@ -24,6 +24,7 @@ class LaporanController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'tanggal' => 'required|date',
+            'status' => 'sometimes|string|in:pending,proses,selesai,menunggu,ditunda',
         ]);
 
         Laporan::create([
@@ -31,6 +32,7 @@ class LaporanController extends Controller
             'deskripsi' => $request->deskripsi,
             'tanggal' => $request->tanggal,
             'user_id' => auth()->id(),
+            'status' => $request->status ?? 'pending',
         ]);
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dibuat.');

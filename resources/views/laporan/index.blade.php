@@ -211,8 +211,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $item->created_at ? $item->created_at->format('d M Y') : 'N/A' }}
                                 </td>
+                                
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    @if($status === 'selesai')
+                                <!--    @if($status === 'selesai')
                                         <button onclick="viewLaporan({{ $item->id }})" class="text-blue-600 hover:text-blue-900 transition-colors">Lihat</button>
                                         <button onclick="downloadLaporan({{ $item->id }})" class="text-green-600 hover:text-green-900 transition-colors">Download</button>
                                     @elseif($status === 'proses')
@@ -225,6 +226,8 @@
                                         <button onclick="resumeLaporan({{ $item->id }})" class="text-green-600 hover:text-green-900 transition-colors">Lanjutkan</button>
                                         <button onclick="cancelLaporan({{ $item->id }})" class="text-red-600 hover:text-red-900 transition-colors">Batalkan</button>
                                     @endif
+                                    
+                            < -->
                                     <button onclick="deleteLaporan({{ $item->id }}, '{{ $item->judul }}')" class="text-red-600 hover:text-red-900 transition-colors">Hapus</button>
                                 </td>
                             </tr>
@@ -277,6 +280,15 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
                         <input type="date" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ date('Y-m-d') }}">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status Laporan</label>
+                        <select name="status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Pilih status</option>
+                            <option value="proses">Sedang Proses</option>
+                            <option value="menunggu">Menunggu Review</option>
+                            <option value="ditunda">Ditunda</option>
+                            <option value="selesai">Selesai</option>
+                        </select>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
                         <textarea name="deskripsi" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" rows="3" placeholder="Deskripsi audit (opsional)"></textarea>
