@@ -158,6 +158,7 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Audit</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul Laporan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anggaran</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auditor</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Dibuat</th>
@@ -178,6 +179,9 @@
                                         <div class="text-sm font-medium text-gray-900">{{ $item->judul ?? 'Laporan Audit' }}</div>
                                         <div class="text-sm text-gray-500">{{ Str::limit($item->deskripsi ?? 'Tidak ada deskripsi', 50) }}</div>
                                     </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ $item->total_anggaran ? 'Rp ' . number_format($item->total_anggaran, 0, ',', '.') : 'N/A' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @php
@@ -214,21 +218,12 @@
                                 </td>
                                 
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <!--    @if($status === 'selesai')
-                                        <button onclick="viewLaporan({{ $item->id }})" class="text-blue-600 hover:text-blue-900 transition-colors">Lihat</button>
-                                        <button onclick="downloadLaporan({{ $item->id }})" class="text-green-600 hover:text-green-900 transition-colors">Download</button>
-                                    @elseif($status === 'proses')
-                                        <button onclick="editLaporan({{ $item->id }})" class="text-blue-600 hover:text-blue-900 transition-colors">Edit</button>
-                                        <button onclick="pauseLaporan({{ $item->id }})" class="text-orange-600 hover:text-orange-900 transition-colors">Tunda</button>
-                                    @elseif($status === 'menunggu')
-                                        <button onclick="reviewLaporan({{ $item->id }})" class="text-purple-600 hover:text-purple-900 transition-colors">Review</button>
-                                        <button onclick="viewLaporan({{ $item->id }})" class="text-blue-600 hover:text-blue-900 transition-colors">Lihat</button>
-                                    @elseif($status === 'ditunda')
-                                        <button onclick="resumeLaporan({{ $item->id }})" class="text-green-600 hover:text-green-900 transition-colors">Lanjutkan</button>
-                                        <button onclick="cancelLaporan({{ $item->id }})" class="text-red-600 hover:text-red-900 transition-colors">Batalkan</button>
-                                    @endif
-                                    
-                            < -->
+                                  <button onclick="showEditAuditModal({{ $item->id }}, '{{ addslashes($item->judul) }}', '{{ $item->total_anggaran }}', '{{ $item->created_at ? $item->created_at->format('Y-m-d') : '' }}', '{{ $item->status }}', '{{ addslashes($item->deskripsi) }}')" 
+                                        class="text-indigo-600 hover:text-indigo-900 transition-colors">
+                                                Edit
+                                            </button>
+
+                            
                                     <button onclick="deleteLaporan({{ $item->id }}, '{{ $item->judul }}')" class="text-red-600 hover:text-red-900 transition-colors">Hapus</button>
                                 </td>
                             </tr>
@@ -269,6 +264,58 @@
             @endif
         </div>
     </main>
+    <div id="editAuditModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Audit</h3>
+           <form id="editAuditForm" method="POST" action="" class="space-y-4">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="edit_laporan_id" name="laporan_id">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Judul Laporan</label>
+                    <input type="text" id="edit_judul" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan judul laporan">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Total Anggaran (Rp)</label>
+                    <input type="number" id="edit_total_anggaran" name="total_anggaran" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan anggaran angka saja">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                    <input type="date" id="edit_tanggal" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status Laporan</label>
+                    <select id="edit_status" name="status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Pilih status</option>
+                        <option value="proses">Sedang Proses</option>
+                        <option value="menunggu">Menunggu Review</option>
+                        <option value="ditunda">Ditunda</option>
+                        <option value="selesai">Selesai</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+                    <textarea id="edit_deskripsi" name="deskripsi" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" rows="3" placeholder="Deskripsi audit (opsional)"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="hideEditAuditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                        Update Audit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- New Audit Modal -->
     <div id="newAuditModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
@@ -281,7 +328,13 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Judul Laporan</label>
                         <input type="text" name="judul" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan judul laporan">
                     </div>
+
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Total Anggaran (Rp)</label>
+                        <input type="number" name="total_anggaran" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan anggaran angka saja">
+                    </div>
+                    <div>
+                    
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
                         <input type="date" name="tanggal" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ date('Y-m-d') }}">
                     </div>
@@ -309,6 +362,9 @@
                 </form>
             </div>
         </div>
+
+        <!-- Edit Audit Modal -->
+
     </div>
 
     <script>
@@ -338,6 +394,30 @@
 
         function hideNewAuditModal() {
             document.getElementById('newAuditModal').classList.add('hidden');
+        }
+
+        function showEditAuditModal(id, judul, total_anggaran, tanggal, status, deskripsi) {
+                    const form = document.getElementById('editAuditForm');
+                    form.action = `/laporan/${id}`; // sesuai route('laporan.update', id)
+                    console.log("Form action:", form.action);
+
+                    document.getElementById('edit_laporan_id').value = id;
+                    document.getElementById('edit_judul').value = judul;
+                    document.getElementById('edit_total_anggaran').value = total_anggaran;
+                    document.getElementById('edit_tanggal').value = tanggal;
+                    document.getElementById('edit_status').value = status;
+                    document.getElementById('edit_deskripsi').value = deskripsi;
+
+                    document.getElementById('editAuditModal').classList.remove('hidden');
+                }
+
+
+
+
+        function hideEditAuditModal() {
+            document.getElementById('editAuditModal').classList.add('hidden');
+            // Clear form
+            document.getElementById('editAuditForm').reset();
         }
 
         // Filter functionality

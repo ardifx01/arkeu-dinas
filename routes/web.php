@@ -20,6 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan', [LaporanController::class,'index'])->name('laporan.index');
     Route::post('/laporan', [LaporanController::class,'store'])->name('laporan.store');
     Route::delete('/laporan/{id}', [LaporanController::class,'destroy'])->name('laporan.destroy');
+    Route::get('/laporan/{id}/edit', [LaporanController::class,'edit'])->name('laporan.edit');
+    Route::put('/laporan/{id}', [LaporanController::class,'update'])->name('laporan.update');
+
 
 
     
